@@ -276,4 +276,5 @@ const (
 	VK_SPACE    = 0x20
 	VK_F2       = 0x71
 	VK_F3       = 0x72
+	VK_F4       = 0x73
 )
