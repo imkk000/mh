@@ -2,9 +2,13 @@ package mh
 
 import (
 	"encoding/binary"
+	"errors"
 	"fmt"
+	"syscall"
 	"unsafe"
 )
+
+const errSemTimeout syscall.Errno = 121
 
 var (
 	procDebugActiveProcess        = modKernel32.NewProc("DebugActiveProcess")
@@ -112,7 +116,7 @@ func WaitForDebugEvent(evt *DEBUG_EVENT, timeoutMs uint32) (bool, error) {
 		uintptr(timeoutMs),
 	)
 	if ret == 0 {
-		if IsErrSuccess(err) {
+		if IsErrSuccess(err) || errors.Is(err, errSemTimeout) {
 			return false, nil
 		}
 		return false, err
